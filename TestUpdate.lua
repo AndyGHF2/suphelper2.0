@@ -1,35 +1,35 @@
-script_version '1.0.0'
-local dlstatus = require "moonloader".download_status
-
-function main()
-	while true do
-		wait(0)
-	end
-end
+local dlstatus = require('moonloader').download_status
 
 function update()
-    local updatePath = os.getenv('TEMP')..'\\Update.json'
-    downloadUrlToFile("https://github.com/AndyGHF2/suphelper2.0/raw/master/test.json", updatePath, function(id, status, p1, p2)
-        if status == dlstatus.STATUS_ENDDOWNLOADDATA then
-            local file = io.open(updatePath, 'r')
-            if file and doesFileExist(updatePath) then
-                local info = decodeJson(file:read("*a"))
-                file:close(); os.remove(updatePath)
-                if info.version ~= thisScript().version then
-                    lua_thread.create(function()
-                        wait(2000)
-                        sampAddChatMessage('Обнаружена новая версия. Попытка скачивания')
-                        downloadUrlToFile("https://github.com/AndyGHF2/suphelper2.0/raw/master/TestUpdate.lua", thisScript().path, function(id, status, p1, p2)
-                            if status == dlstatus.STATUS_ENDDOWNLOADDATA then
-                                sampAddChatMessage('Обновление завершено. Версия:'..info.version)
-                                thisScript():reload()
-                            end
-                        end)
-                    end)
-                else
-                    sampAddChatMessage('Используется последняя версия')
-                end
-            end
+  local fpath = os.getenv('TEMP') .. '\\testing_version.json' -- куда будет качаться наш файлик для сравнения версии
+  downloadUrlToFile('https://github.com/AndyGHF2/suphelper2.0/raw/master/test.json', fpath, function(id, status, p1, p2)
+    if status == dlstatus.STATUS_ENDDOWNLOADDATA then
+    local f = io.open(fpath, 'r')
+    if f then
+      local info = decodeJson(f:read('*a'))
+      updatelink = info.updateurl
+      if info and info.latest then
+        version = tonumber(info.latest)
+        if version > tonumber(thisScript().version) then
+          lua_thread.create(goupdate)
+        else
+          update = false
+          sampAddChatMessage(('Установлена последняя версия'), color)
         end
-    end)
+      end
+    end
+  end
+end)
+end
+
+function goupdate()
+sampAddChatMessage(('Обнаружено обновление'), color)
+sampAddChatMessage(('Обновление с '..thisScript().version.." до "..version), color)
+wait(300)
+downloadUrlToFile(updatelink, thisScript().path, function(id3, status1, p13, p23) -- качает ваш файлик с latest version
+  if status1 == dlstatus.STATUS_ENDDOWNLOADDATA then
+  sampAddChatMessage(('Обновление завершено!'), color)
+  thisScript():reload()
+end
+end)
 end
