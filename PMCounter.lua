@@ -21,15 +21,13 @@ local main_window_state = imgui.ImBool(false)
     imgui.SetNextWindowSize(imgui.ImVec2(390, 250), imgui.Cond.FirstUseEver)
 		imgui.SetNextWindowPos(imgui.ImVec2(1094, 795), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8'PM Counter ', main_window_state, 2)
-
-
-		if imgui.Checkbox(u8'РЎС‡РµС‚С‡РёРє РѕС‚РІРµС‚РѕРІ', checkbox1) then
+		if imgui.Checkbox(u8'Счетчик ответов', checkbox1) then
 			iniData.Data.CountPM = not iniData.Data.CountPM
 			inicfg.save(iniData, iniDir)
 			if iniData.Data.CountPM then
-				sampAddChatMessage('[{1E90FF}LUA{FFFFFF}] РЎС‡РµС‚С‡РёРє РѕС‚РІРµС‚РѕРІ {33aa33}РІРєР»СЋС‡РµРЅ', -1)
+				sampAddChatMessage('[{1E90FF}LUA{FFFFFF}] Счетчик ответов {33aa33}включен', -1)
 			else
-				sampAddChatMessage('[{1E90FF}LUA{FFFFFF}] РЎС‡РµС‚С‡РёРє РѕС‚РІРµС‚РѕРІ {FF6347}РѕС‚РєР»СЋС‡РµРЅ', -1)
+				sampAddChatMessage('[{1E90FF}LUA{FFFFFF}] Счетчик ответов {FF6347}отключен', -1)
 			end
 		end
 		imgui.End()
@@ -140,21 +138,21 @@ function autoupdate(json_url, prefix, url)
               lua_thread.create(function(prefix)
                 local dlstatus = require('moonloader').download_status
                 local color = -1
-                sampAddChatMessage((prefix..'РћР±РЅР°СЂСѓР¶РµРЅРѕ РѕР±РЅРѕРІР»РµРЅРёРµ. РќР°С‡Р°Р»Рѕ РѕР±РЅРѕРІРёРІР»РµРЅРёСЏ c '..thisScript().version..' РЅР° '..updateversion), color)
+                sampAddChatMessage((prefix..'Обнаружено обновление. Начало обновивления c '..thisScript().version..' на '..updateversion), color)
                 wait(250)
                 downloadUrlToFile(updatelink, thisScript().path,
                   function(id3, status1, p13, p23)
                     if status1 == dlstatus.STATUS_DOWNLOADINGDATA then
-                      print(string.format('Р—Р°РіСЂСѓР¶РµРЅРѕ %d РёР· %d.', p13, p23))
+                      print(string.format('Загружено %d из %d.', p13, p23))
                     elseif status1 == dlstatus.STATUS_ENDDOWNLOADDATA then
-                      print('Р—Р°РіСЂСѓР·РєР° РѕР±РЅРѕРІР»РµРЅРёСЏ Р·Р°РІРµСЂС€РµРЅР°.')
-                      sampAddChatMessage((prefix..'РћР±РЅРѕРІР»РµРЅРёРµ Р·Р°РІРµСЂС€РµРЅРѕ!'), color)
+                      print('Загрузка обновления завершена.')
+                      sampAddChatMessage((prefix..'Обновление завершено!'), color)
                       goupdatestatus = true
                       lua_thread.create(function() wait(500) thisScript():reload() end)
                     end
                     if status1 == dlstatus.STATUSEX_ENDDOWNLOAD then
                       if goupdatestatus == nil then
-                        sampAddChatMessage((prefix..'РћР±РЅРѕРІР»РµРЅРёРµ РїСЂРѕС€Р»Рѕ РЅРµСѓРґР°С‡РЅРѕ. Р—Р°РїСѓСЃРє СѓСЃС‚Р°СЂРµРІС€РµР№ РІРµСЂСЃРёРё..'), color)
+                        sampAddChatMessage((prefix..'Обновление прошло неудачно. Запуск устаревшей версии...'), color)
                         update = false
                       end
                     end
@@ -164,11 +162,11 @@ function autoupdate(json_url, prefix, url)
               )
             else
               update = false
-              print('v'..thisScript().version..': РћР±РЅРѕРІР»РµРЅРёРµ РЅРµ С‚СЂРµР±СѓРµС‚СЃСЏ.')
+              print('v'..thisScript().version..': Обновление не требуется')
             end
           end
         else
-          print('v'..thisScript().version..': РћС€РёР±РєР° РїСЂРё РїСЂРѕРІРµСЂРєРµ РЅР°Р»РёС‡РёРё РѕР±РЅРѕРІР»РµРЅРёСЏ. РџСЂРѕРІРµСЂСЊС‚Рµ СЃР°РјРѕСЃС‚РѕСЏС‚РµР»СЊРЅРѕ РЅР° '..url)
+          print('v'..thisScript().version..': Ошибка при проверке наличии обновления. Проверьте самостоятельно на '..url)
           update = false
         end
       end
