@@ -6,7 +6,7 @@ encoding.default = 'CP1251'
 u8 = encoding.UTF8
 
 function main()
-	function update()
+	update()
 	while true do
 	    wait(0)
 		end
