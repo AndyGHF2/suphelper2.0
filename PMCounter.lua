@@ -21,7 +21,7 @@ local main_window_state = imgui.ImBool(false)
     imgui.SetNextWindowSize(imgui.ImVec2(390, 250), imgui.Cond.FirstUseEver)
 		imgui.SetNextWindowPos(imgui.ImVec2(1094, 795), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8'PM Counter ', main_window_state, 2)
-		if imgui.Checkbox(u8'Ñ÷åò÷èê îòâåòîâ', checkbox1) then
+		if imgui.Checkbox(u8'Счетчик PM', checkbox1) then
 			iniData.Data.CountPM = not iniData.Data.CountPM
 			inicfg.save(iniData, iniDir)
 			if iniData.Data.CountPM then
