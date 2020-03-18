@@ -1,5 +1,13 @@
 script_version("0.2")
 local dlstatus = require('moonloader').download_status
+local color = 0x348cb2
+
+function main()
+	function update()
+	while true do
+	    wait(0)
+		end
+end
 
 function update()
   local fpath = os.getenv('TEMP') .. '\\test.json' -- куда будет качаться наш файлик для сравнения версии
