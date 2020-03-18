@@ -21,13 +21,13 @@ local main_window_state = imgui.ImBool(false)
     imgui.SetNextWindowSize(imgui.ImVec2(390, 250), imgui.Cond.FirstUseEver)
 		imgui.SetNextWindowPos(imgui.ImVec2(1094, 795), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8'PM Counter ', main_window_state, 2)
-		if imgui.Checkbox(u8'Счетчик ответов', checkbox1) then
+		if imgui.Checkbox(u8'Г‘Г·ГҐГІГ·ГЁГЄ Г®ГІГўГҐГІГ®Гў', checkbox1) then
 			iniData.Data.CountPM = not iniData.Data.CountPM
 			inicfg.save(iniData, iniDir)
 			if iniData.Data.CountPM then
-				sampAddChatMessage('[{1E90FF}LUA{FFFFFF}] Счетчик ответов {33aa33}включен', -1)
+				sampAddChatMessage('[{1E90FF}LUA{FFFFFF}] Г‘Г·ГҐГІГ·ГЁГЄ Г®ГІГўГҐГІГ®Гў {33aa33}ГўГЄГ«ГѕГ·ГҐГ­', -1)
 			else
-				sampAddChatMessage('[{1E90FF}LUA{FFFFFF}] Счетчик ответов {FF6347}отключен', -1)
+				sampAddChatMessage('[{1E90FF}LUA{FFFFFF}] Г‘Г·ГҐГІГ·ГЁГЄ Г®ГІГўГҐГІГ®Гў {FF6347}Г®ГІГЄГ«ГѕГ·ГҐГ­', -1)
 			end
 		end
 		imgui.End()
@@ -129,7 +129,7 @@ function autoupdate(json_url, prefix, url)
         if doesFileExist(json) then
           local f = io.open(json, 'r')
           if f then
-            local info = encodeJson(f:read('*a'))
+            local info = decodeJson(f:read('*a'))
             updatelink = info.updateurl
             updateversion = info.latest
             f:close()
@@ -138,21 +138,21 @@ function autoupdate(json_url, prefix, url)
               lua_thread.create(function(prefix)
                 local dlstatus = require('moonloader').download_status
                 local color = -1
-                sampAddChatMessage((prefix..'Обнаружено обновление. Начало обновивления c '..thisScript().version..' на '..updateversion), color)
+                sampAddChatMessage((prefix..'ГЋГЎГ­Г Г°ГіГ¦ГҐГ­Г® Г®ГЎГ­Г®ГўГ«ГҐГ­ГЁГҐ. ГЌГ Г·Г Г«Г® Г®ГЎГ­Г®ГўГЁГўГ«ГҐГ­ГЁГї c '..thisScript().version..' Г­Г  '..updateversion), color)
                 wait(250)
                 downloadUrlToFile(updatelink, thisScript().path,
                   function(id3, status1, p13, p23)
                     if status1 == dlstatus.STATUS_DOWNLOADINGDATA then
-                      print(string.format('Загружено %d из %d.', p13, p23))
+                      print(string.format('Г‡Г ГЈГ°ГіГ¦ГҐГ­Г® %d ГЁГ§ %d.', p13, p23))
                     elseif status1 == dlstatus.STATUS_ENDDOWNLOADDATA then
-                      print('Загрузка обновления завершена.')
-                      sampAddChatMessage((prefix..'Обновление завершено!'), color)
+                      print('Г‡Г ГЈГ°ГіГ§ГЄГ  Г®ГЎГ­Г®ГўГ«ГҐГ­ГЁГї Г§Г ГўГҐГ°ГёГҐГ­Г .')
+                      sampAddChatMessage((prefix..'ГЋГЎГ­Г®ГўГ«ГҐГ­ГЁГҐ Г§Г ГўГҐГ°ГёГҐГ­Г®!'), color)
                       goupdatestatus = true
                       lua_thread.create(function() wait(500) thisScript():reload() end)
                     end
                     if status1 == dlstatus.STATUSEX_ENDDOWNLOAD then
                       if goupdatestatus == nil then
-                        sampAddChatMessage((prefix..'Обновление прошло неудачно. Запуск устаревшей версии...'), color)
+                        sampAddChatMessage((prefix..'ГЋГЎГ­Г®ГўГ«ГҐГ­ГЁГҐ ГЇГ°Г®ГёГ«Г® Г­ГҐГіГ¤Г Г·Г­Г®. Г‡Г ГЇГіГ±ГЄ ГіГ±ГІГ Г°ГҐГўГёГҐГ© ГўГҐГ°Г±ГЁГЁ...'), color)
                         update = false
                       end
                     end
@@ -162,11 +162,11 @@ function autoupdate(json_url, prefix, url)
               )
             else
               update = false
-              print('v'..thisScript().version..': Обновление не требуется')
+              print('v'..thisScript().version..': ГЋГЎГ­Г®ГўГ«ГҐГ­ГЁГҐ Г­ГҐ ГІГ°ГҐГЎГіГҐГІГ±Гї')
             end
           end
         else
-          print('v'..thisScript().version..': Ошибка при проверке наличии обновления. Проверьте самостоятельно на '..url)
+          print('v'..thisScript().version..': ГЋГёГЁГЎГЄГ  ГЇГ°ГЁ ГЇГ°Г®ГўГҐГ°ГЄГҐ Г­Г Г«ГЁГ·ГЁГЁ Г®ГЎГ­Г®ГўГ«ГҐГ­ГЁГї. ГЏГ°Г®ГўГҐГ°ГјГІГҐ Г±Г Г¬Г®Г±ГІГ®ГїГІГҐГ«ГјГ­Г® Г­Г  '..url)
           update = false
         end
       end
