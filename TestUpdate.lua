@@ -1,7 +1,7 @@
 local dlstatus = require('moonloader').download_status
 
 function update()
-  local fpath = os.getenv('TEMP') .. '\\testing_version.json' -- куда будет качаться наш файлик для сравнения версии
+  local fpath = os.getenv('TEMP') .. '\\testing_version.json' 
   downloadUrlToFile('https://github.com/AndyGHF2/suphelper2.0/raw/master/test.json', fpath, function(id, status, p1, p2)
     if status == dlstatus.STATUS_ENDDOWNLOADDATA then
     local f = io.open(fpath, 'r')
@@ -14,7 +14,7 @@ function update()
           lua_thread.create(goupdate)
         else
           update = false
-          sampAddChatMessage(('Установлена последняя версия'), color)
+          sampAddChatMessage(('Г“Г±ГІГ Г­Г®ГўГ«ГҐГ­Г  ГЇГ®Г±Г«ГҐГ¤Г­ГїГї ГўГҐГ°Г±ГЁГї'), color)
         end
       end
     end
@@ -23,12 +23,12 @@ end)
 end
 
 function goupdate()
-sampAddChatMessage(('Обнаружено обновление'), color)
-sampAddChatMessage(('Обновление с '..thisScript().version.." до "..version), color)
+sampAddChatMessage(('ГЋГЎГ­Г Г°ГіГ¦ГҐГ­Г® Г®ГЎГ­Г®ГўГ«ГҐГ­ГЁГҐ'), color)
+sampAddChatMessage(('ГЋГЎГ­Г®ГўГ«ГҐГ­ГЁГҐ Г± '..thisScript().version.." Г¤Г® "..version), color)
 wait(300)
-downloadUrlToFile(updatelink, thisScript().path, function(id3, status1, p13, p23) -- качает ваш файлик с latest version
+downloadUrlToFile(updatelink, thisScript().path, function(id3, status1, p13, p23)
   if status1 == dlstatus.STATUS_ENDDOWNLOADDATA then
-  sampAddChatMessage(('Обновление завершено!'), color)
+  sampAddChatMessage(('ГЋГЎГ­Г®ГўГ«ГҐГ­ГЁГҐ Г§Г ГўГҐГ°ГёГҐГ­Г®!'), color)
   thisScript():reload()
 end
 end)
