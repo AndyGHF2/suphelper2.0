@@ -1,6 +1,9 @@
-script_version("0.2")
+script_version("0.3")
 local dlstatus = require('moonloader').download_status
 local color = 0x348cb2
+local encoding = require 'encoding'
+encoding.default = 'CP1251'
+u8 = encoding.UTF8
 
 function main()
 	function update()
