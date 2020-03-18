@@ -131,7 +131,7 @@ function autoupdate(json_url, prefix, url)
         if doesFileExist(json) then
           local f = io.open(json, 'r')
           if f then
-            local info = decodeJson(f:read('*a'))
+            local info = encodeJson(f:read('*a'))
             updatelink = info.updateurl
             updateversion = info.latest
             f:close()
