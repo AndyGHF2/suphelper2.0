@@ -25,9 +25,9 @@ local main_window_state = imgui.ImBool(false)
 			iniData.Data.CountPM = not iniData.Data.CountPM
 			inicfg.save(iniData, iniDir)
 			if iniData.Data.CountPM then
-				sampAddChatMessage('[{1E90FF}LUA{FFFFFF}] Ñ÷åò÷èê îòâåòîâ {33aa33}âêëþ÷åí', -1)
+				sampAddChatMessage('[{1E90FF}LUA{FFFFFF}] Счетчик ответов {33aa33}включен', -1)
 			else
-				sampAddChatMessage('[{1E90FF}LUA{FFFFFF}] Ñ÷åò÷èê îòâåòîâ {FF6347}îòêëþ÷åí', -1)
+				sampAddChatMessage('[{1E90FF}LUA{FFFFFF}] Счетчик ответов {FF6347}выключен', -1)
 			end
 		end
 		imgui.End()
@@ -138,21 +138,21 @@ function autoupdate(json_url, prefix, url)
               lua_thread.create(function(prefix)
                 local dlstatus = require('moonloader').download_status
                 local color = -1
-                sampAddChatMessage((prefix..'Îáíàðóæåíî îáíîâëåíèå. Íà÷àëî îáíîâèâëåíèÿ c '..thisScript().version..' íà '..updateversion), color)
+                sampAddChatMessage((prefix..'Обнаружено обновление. Попытка обновиться c '..thisScript().version..' до '..updateversion), color)
                 wait(250)
                 downloadUrlToFile(updatelink, thisScript().path,
                   function(id3, status1, p13, p23)
                     if status1 == dlstatus.STATUS_DOWNLOADINGDATA then
-                      print(string.format('Çàãðóæåíî %d èç %d.', p13, p23))
+                      print(string.format('Загружено %d из %d.', p13, p23))
                     elseif status1 == dlstatus.STATUS_ENDDOWNLOADDATA then
-                      print('Çàãðóçêà îáíîâëåíèÿ çàâåðøåíà.')
-                      sampAddChatMessage((prefix..'Îáíîâëåíèå çàâåðøåíî!'), color)
+                      print('Загрузка обновления завершена')
+                      sampAddChatMessage((prefix..'Обновление завершено!'), color)
                       goupdatestatus = true
                       lua_thread.create(function() wait(500) thisScript():reload() end)
                     end
                     if status1 == dlstatus.STATUSEX_ENDDOWNLOAD then
                       if goupdatestatus == nil then
-                        sampAddChatMessage((prefix..'Îáíîâëåíèå ïðîøëî íåóäà÷íî. Çàïóñê óñòàðåâøåé âåðñèè...'), color)
+                        sampAddChatMessage((prefix..'Обновление прошло неудачно. Запуск устаревшей версии...'), color)
                         update = false
                       end
                     end
@@ -162,11 +162,11 @@ function autoupdate(json_url, prefix, url)
               )
             else
               update = false
-              print('v'..thisScript().version..': Îáíîâëåíèå íå òðåáóåòñÿ')
+              print('v'..thisScript().version..': Обновление не требуется.')
             end
           end
         else
-          print('v'..thisScript().version..': Îøèáêà ïðè ïðîâåðêå íàëè÷èè îáíîâëåíèÿ. Ïðîâåðüòå ñàìîñòîÿòåëüíî íà '..url)
+          print('v'..thisScript().version..': Не возможно проверить обновление. Попробуйте проверить самостоятельно на '..url)
           update = false
         end
       end
