@@ -1,62 +1,35 @@
+script_version '1.0.0'
+local dlstatus = require "moonloader".download_status
+
 function main()
-	autoupdate("https://github.com/AndyGHF2/suphelper2.0/raw/master/test.json", '['..string.upper(thisScript().name)..']: ', "https://github.com/AndyGHF2/suphelper2.0/raw/master/test.json")
 	while true do
 		wait(0)
 	end
 end
 
-function autoupdate(json_url, prefix, url)
-  local dlstatus = require('moonloader').download_status
-  local json = getWorkingDirectory() .. '\\'..thisScript().name..'-version.json'
-  if doesFileExist(json) then os.remove(json) end
-  downloadUrlToFile(json_url, json,
-    function(id, status, p1, p2)
-      if status == dlstatus.STATUSEX_ENDDOWNLOAD then
-        if doesFileExist(json) then
-          local f = io.open(json, 'r')
-          if f then
-            local info = decodeJson(f:read('*a'))
-            updatelink = info.updateurl
-            updateversion = info.latest
-            f:close()
-            os.remove(json)
-            if updateversion ~= thisScript().version then
-              lua_thread.create(function(prefix)
-                local dlstatus = require('moonloader').download_status
-                local color = -1
-                sampAddChatMessage((prefix..'Обнаружено обновление. Попытка обновиться c '..thisScript().version..' на '..updateversion), color)
-                wait(250)
-                downloadUrlToFile(updatelink, thisScript().path,
-                  function(id3, status1, p13, p23)
-                    if status1 == dlstatus.STATUS_DOWNLOADINGDATA then
-                      print(string.format('Загружено %d из %d.', p13, p23))
-                    elseif status1 == dlstatus.STATUS_ENDDOWNLOADDATA then
-                      print('Загрузка обновления завершена.')
-                      sampAddChatMessage((prefix..'Обновление завершено!'), color)
-                      goupdatestatus = true
-                      lua_thread.create(function() wait(500) thisScript():reload() end)
-                    end
-                    if status1 == dlstatus.STATUSEX_ENDDOWNLOAD then
-                      if goupdatestatus == nil then
-                        sampAddChatMessage((prefix..'Обновление прошло неудачно. Запуск устаревшей версии..'), color)
-                        update = false
-                      end
-                    end
-                  end
-                )
-                end, prefix
-              )
-            else
-              update = false
-              print('v'..thisScript().version..': Обновление не требуется.')
+function update()
+    local updatePath = os.getenv('TEMP')..'\\Update.json'
+    downloadUrlToFile("https://github.com/AndyGHF2/suphelper2.0/raw/master/test.json", updatePath, function(id, status, p1, p2)
+        if status == dlstatus.STATUS_ENDDOWNLOADDATA then
+            local file = io.open(updatePath, 'r')
+            if file and doesFileExist(updatePath) then
+                local info = decodeJson(file:read("*a"))
+                file:close(); os.remove(updatePath)
+                if info.version ~= thisScript().version then
+                    lua_thread.create(function()
+                        wait(2000)
+                        sampAddChatMessage('Обнаружена новая версия. Попытка скачивания')
+                        downloadUrlToFile("https://github.com/AndyGHF2/suphelper2.0/raw/master/TestUpdate.lua", thisScript().path, function(id, status, p1, p2)
+                            if status == dlstatus.STATUS_ENDDOWNLOADDATA then
+                                sampAddChatMessage('Обновление завершено. Версия:'..info.version)
+                                thisScript():reload()
+                            end
+                        end)
+                    end)
+                else
+                    sampAddChatMessage('Используется последняя версия')
+                end
             end
-          end
-        else
-          print('v'..thisScript().version..': Не возможно проверить обновление. Проверьте его самостоятельно на '..url)
-          update = false
         end
-      end
-    end
-  )
-  while update ~= false do wait(100) end
+    end)
 end
