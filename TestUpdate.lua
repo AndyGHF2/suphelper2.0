@@ -1,3 +1,4 @@
+script_version("0.1")
 local dlstatus = require('moonloader').download_status
 
 function update()
